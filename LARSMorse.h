@@ -23,7 +23,7 @@
 
 @class LARSMorse;
 
-@protocol MorseCodeDelegate <NSObject>
+@protocol LARSMorseDelegate <NSObject>
 @optional
 - (void)morseCode:(LARSMorse *)morse willEncodeLetters:(NSString *)nextLetters inWord:(NSString *)currentWord withCode:(NSString *)code withSpeedInWPM:(NSInteger)wpm;
 - (void)morseCode:(LARSMorse *)morse didBeginEncodingText:(NSString *)text;
@@ -34,7 +34,7 @@
 
 @interface LARSMorse : LARSStrobe {
 
-    id <MorseCodeDelegate> _delegate;
+    id <LARSMorseDelegate> _delegate;
 	NSMutableString *morseArray;
     NSArray *_wordArray;
     NSDictionary *_morseCodeDict;
