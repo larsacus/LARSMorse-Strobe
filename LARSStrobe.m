@@ -15,9 +15,9 @@
 //
 
 #if !TARGET_IPHONE_SIMULATOR
-#import "StrobeLight.h"
+#import "LARSStrobe.h"
 
-@implementation StrobeLight
+@implementation LARSStrobe
 
 @synthesize torch = _torch,
             period, 
@@ -26,7 +26,7 @@
             originalFlashlightState, 
             shouldStopStrobe;
 
-- (id)initWithLATorch:(LATorch *)torch{
+- (id)initWithLARSTorch:(LARSTorch *)torch{
 	if(self = [super init]){
 		//perform setup here
 		[self setTorch:torch];

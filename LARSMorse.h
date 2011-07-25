@@ -17,22 +17,22 @@
 
 #if !TARGET_IPHONE_SIMULATOR
 #import <Foundation/Foundation.h>
-#import "StrobeLight.h"
+#import "LARSStrobe.h"
 
 #define kDroidLightMorseDidFinish @"kDroidLightMorseDidFinish"
 
-@class Morse;
+@class LARSMorse;
 
 @protocol MorseCodeDelegate <NSObject>
 @optional
-- (void)morseCode:(Morse *)morse willEncodeLetters:(NSString *)nextLetters inWord:(NSString *)currentWord withCode:(NSString *)code withSpeedInWPM:(NSInteger)wpm;
-- (void)morseCode:(Morse *)morse didBeginEncodingText:(NSString *)text;
-- (BOOL)morseCodeShouldAutoRepeat:(Morse *)morse;
-- (void)morseCodeDidEnd:(Morse *)morse withRepeat:(BOOL)willRepeat withError:(NSError *)error;
+- (void)morseCode:(LARSMorse *)morse willEncodeLetters:(NSString *)nextLetters inWord:(NSString *)currentWord withCode:(NSString *)code withSpeedInWPM:(NSInteger)wpm;
+- (void)morseCode:(LARSMorse *)morse didBeginEncodingText:(NSString *)text;
+- (BOOL)morseCodeShouldAutoRepeat:(LARSMorse *)morse;
+- (void)morseCodeDidEnd:(LARSMorse *)morse withRepeat:(BOOL)willRepeat withError:(NSError *)error;
 
 @end
 
-@interface Morse : StrobeLight {
+@interface LARSMorse : LARSStrobe {
 
     id <MorseCodeDelegate> _delegate;
 	NSMutableString *morseArray;
@@ -64,7 +64,7 @@
 @property(nonatomic) BOOL shouldAdvanceLetter;
 @property(nonatomic,getter = isRunning) BOOL running;
 
-- (id)initWithLATorch:(LATorch *)torch;
+- (id)initWithLARSTorch:(LARSTorch *)torch;
 - (void)translateCharacterToMorse:(unichar)character addToArray:(NSMutableString *)characterArray;
 - (void)stringToMorse:(NSString *)stringToTranslate;
 - (void)stopMorsePlayback;

@@ -17,10 +17,10 @@
 
 //
 #if !TARGET_IPHONE_SIMULATOR
-#import "Morse.h"
+#import "LARSMorse.h"
 
 
-@implementation Morse
+@implementation LARSMorse
 
 @synthesize delegate = _delegate;
 @synthesize morseArray, 
@@ -36,8 +36,8 @@
 @synthesize shouldAdvanceLetter = _shouldAdvanceLetter;
 @synthesize running = _running;
 
-- (id)initWithLATorch:(LATorch *)torch{
-	if (self = [super initWithLATorch:torch]) {
+- (id)initWithLARSTorch:(LARSTorch *)torch{
+	if (self = [super initWithLARSTorch:torch]) {
 		
 	}
 	self.wpm = 5;

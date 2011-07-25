@@ -17,12 +17,12 @@
 #if !TARGET_IPHONE_SIMULATOR
 #import <Foundation/Foundation.h>
 #import <AVFoundation/AVFoundation.h>
-#import "LATorch.h"
+#import "LARSTorch.h"
 
 
-@interface StrobeLight : NSObject {
+@interface LARSStrobe : NSObject {
 	
-	LATorch *_torch;
+	LARSTorch *_torch;
 	float period;
 	NSTimer *strobeTimer;
 	NSTimer *strobeTimerOff;
@@ -30,14 +30,14 @@
 	BOOL shouldStopStrobe;
 }
 
-@property (nonatomic,retain) LATorch *torch;
+@property (nonatomic,retain) LARSTorch *torch;
 @property (nonatomic) float period;
 @property (nonatomic,retain) NSTimer *strobeTimer;
 @property (nonatomic,retain) NSTimer *strobeTimerOff;
 @property (nonatomic) BOOL originalFlashlightState;
 @property (nonatomic) BOOL shouldStopStrobe;
 
-- (id)initWithLATorch:(LATorch *)torch;
+- (id)initWithLARSTorch:(LARSTorch *)torch;
 - (void)toggleStrobe;
 - (void)beginStrobeWithOnFraction:(CGFloat)fractionOn period:(NSInteger *)time times:(NSInteger *)times repeat:(BOOL)repeat;
 - (void)startStrobe;
