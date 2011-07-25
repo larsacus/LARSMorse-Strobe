@@ -1,6 +1,10 @@
 #LARSMorse & LARSStrobe
+##Requirements
+ - iOS 4.0+
+ - iPhone 4+ (Device with LED flash)
+
 ##LARSMorse
-LARSMorse will enable the LED flash on the back of an iDevice with a flash to be used to encode strings into Morse transmissions.
+LARSMorse will enable the LED flash on the back of an iDevice with a flash to be used to encode strings into visual Morse transmissions.
 
 ###Delegate Callback Methods
     - (void)morseCode:(Morse *)morse willEncodeLetters:(NSString *)nextLetters inWord:(NSString *)currentWord withCode:(NSString *)code withSpeedInWPM:(NSInteger)wpm;
@@ -10,6 +14,8 @@ LARSMorse will enable the LED flash on the back of an iDevice with a flash to be
     
     - (void)morseCode:(Morse *)morse willEncodeLetters:(NSString *)nextLetters inWord:(NSString *)currentWord withCode:(NSString *)code withSpeedInWPM:(NSInteger)wpm  
 Delegate callback sent before the first symbol in a letter is displayed on the LED.  Identifies the instance that sent the delegate callback (*morse*), the next four letters (*nextLetters*) that are going to be decoded in the future including the current letter, the current word the current letter is in (*currentWord*), the current code of the letter being displayed (*code*) and the speed at which the letters are being transmitted (*wpm*).
+
+---
 
     - (void)morseCode:(Morse *)morse didBeginEncodingText:(NSString *)text
 Delegate callback sent before the first letter in the *text* that is to be transmitted is transmitted.
