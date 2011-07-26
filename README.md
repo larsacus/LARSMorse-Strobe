@@ -20,7 +20,7 @@ LARSStrobe *strobe = [[LARSStrobe alloc] initWithLATorch:torch];
 ##LARSMorse *(subclass of `LARSStrobe`)*
 `LARSMorse` will enable the LED flash on the back of an iDevice with a flash to be used to encode strings into visual Morse transmissions.
 
-***Requires both `LARSTorch` & `LARSStrobe` to function***
+***Requires both `LARSTorch` & `LARSStrobe`***
 
 ###Delegate Callback Methods
 ####Summary
@@ -60,7 +60,7 @@ LARSStrobe *strobe = [[LARSStrobe alloc] initWithLATorch:torch];
 
 ``` objective-c
 LARSTorch *torch = [[LARSTorch alloc] init];
-LARSMorse *morse = [[LARSMorse alloc] initWithLATorch:torch];
+LARSMorse *morse = [[LARSMorse alloc] initWithLARSTorch:torch];
 
 [morse stringToMorse:@"Hello World"];
 [morse playbackMorse];
