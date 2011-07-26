@@ -8,22 +8,12 @@
 
 ***Requires `LARSTorch`***
 
-###To Use
- 1. Create instance of `LARSTorch`
+### Usage
 
 ``` objective-c
 LARSTorch *torch = [[LARSTorch alloc] init];
-```
-
- 2. Create instance of `LARSStrobe` and pass in `LARSTorch`
-
-``` objective-c
 LARSStrobe *strobe = [[LARSStrobe alloc] initWithLATorch:torch];
-```
 
- 3. Start strobe with default settings
-
-``` objective-c
 [strobe startStrobe];
 ```
 
@@ -55,13 +45,13 @@ LARSStrobe *strobe = [[LARSStrobe alloc] initWithLATorch:torch];
  - Delegate callback sent before the first letter in the `text` that is to be transmitted is transmitted.
 
 ``` objective-c
-- (BOOL)morseCodeShouldAutoRepeat:(Morse *)morse;
+- (BOOL)morseCodeShouldAutoRepeat:(Morse *)morse
 ```
 
  - Delegate callback determining whether or not the instance of `morse` should autorepeat.  Value is grabbed just after the last symbol in the last word is transmitted.
 
 ``` objective-c
-- (void)morseCodeDidEnd:(Morse *)morse withRepeat:(BOOL)willRepeat withError:(NSError *)error;
+- (void)morseCodeDidEnd:(Morse *)morse withRepeat:(BOOL)willRepeat withError:(NSError *)error
 ```
 
  - Delegate callback fired when the last symbol on the last letter is transmitted in `morse`.  The method indicates whether `morse` will repeat (`willRepeat`) and if it had an `error` (not yet implemented).
