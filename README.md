@@ -6,22 +6,22 @@
 ##LARSStrobe
 `LARSStrobe` will enable the LED flash on the back of an iDevice with a flash to be used as a strobe light.  This class is required for `LARSMorse` to function, but can function on it's own as a strobe light.
 
-***Requires LARSTorch***
+***Requires `LARSTorch`***
 
 ###To Use
  1. Create instance of `LARSTorch`
 
-`LARSTorch *torch = [[LARSTorch alloc] init];`
+    `LARSTorch *torch = [[LARSTorch alloc] init];`
 
- 2. Create instance of LARSStrobe and pass in LARSTorch
+ 2. Create instance of `LARSStrobe` and pass in `LARSTorch`
 
-`LARSStrobe *strobe = [[LARSStrobe alloc] initWithLATorch:torch];`
+    `LARSStrobe *strobe = [[LARSStrobe alloc] initWithLATorch:torch];`
 
  3. Start strobe with default settings
 
-`[strobe startStrobe];`
+    `[strobe startStrobe];`
 
-##LARSMorse *(subclass of LARSStrobe)*
+##LARSMorse *(subclass of `LARSStrobe`)*
 `LARSMorse` will enable the LED flash on the back of an iDevice with a flash to be used to encode strings into visual Morse transmissions.
 
 ***Requires both `LARSTorch` & `LARSStrobe` to function***
