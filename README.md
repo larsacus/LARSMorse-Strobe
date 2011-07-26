@@ -28,10 +28,12 @@
 
 ###Delegate Callback Methods
 ####Summary
-    - (void)morseCode:(Morse *)morse willEncodeLetters:(NSString *)nextLetters inWord:(NSString *)currentWord withCode:(NSString *)code withSpeedInWPM:(NSInteger)wpm;
-    - (void)morseCode:(Morse *)morse didBeginEncodingText:(NSString *)text;
-    - (BOOL)morseCodeShouldAutoRepeat:(Morse *)morse;
-    - (void)morseCodeDidEnd:(Morse *)morse withRepeat:(BOOL)willRepeat withError:(NSError *)error;
+``` objective-c
+- (void)morseCode:(Morse *)morse willEncodeLetters:(NSString *)nextLetters inWord:(NSString *)currentWord withCode:(NSString *)code withSpeedInWPM:(NSInteger)wpm;
+- (void)morseCode:(Morse *)morse didBeginEncodingText:(NSString *)text;
+- (BOOL)morseCodeShouldAutoRepeat:(Morse *)morse;
+- (void)morseCodeDidEnd:(Morse *)morse withRepeat:(BOOL)willRepeat withError:(NSError *)error;
+```
 
 ####Detail
 `- (void)morseCode:(Morse *)morse willEncodeLetters:(NSString *)nextLetters inWord:(NSString *)currentWord withCode:(NSString *)code withSpeedInWPM:(NSInteger)wpm`
