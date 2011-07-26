@@ -19,7 +19,7 @@
 #import <Foundation/Foundation.h>
 #import "LARSStrobe.h"
 
-#define kDroidLightMorseDidFinish @"kDroidLightMorseDidFinish"
+#define kLARSMorseDidFinish @"kLARSMorseDidFinish"
 
 @class LARSMorse;
 

@@ -219,7 +219,7 @@
     [self setCurrentWordCount:0];
     [self setShouldAdvanceLetter:YES];//for first letter
     if (shouldNotify) {
-        [[NSNotificationCenter defaultCenter] postNotificationName:kDroidLightMorseDidFinish object:nil];
+        [[NSNotificationCenter defaultCenter] postNotificationName:kLARSMorseDidFinish object:nil];
         if ([[self delegate] respondsToSelector:@selector(morseCodeDidEnd:withRepeat:withError:)]) {
             [[self delegate] morseCodeDidEnd:self withRepeat:willRepeat withError:error];
         }
