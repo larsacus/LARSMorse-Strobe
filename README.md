@@ -35,30 +35,34 @@
 
 ####Detail
 `- (void)morseCode:(Morse *)morse willEncodeLetters:(NSString *)nextLetters inWord:(NSString *)currentWord withCode:(NSString *)code withSpeedInWPM:(NSInteger)wpm`
- - Delegate callback sent before the first symbol in a letter is displayed on the LED.  Identifies the instance that sent the delegate callback (*morse*), the next four letters (*nextLetters*) that are going to be decoded in the future including the current letter, the current word the current letter is in (*currentWord*), the current code of the letter being displayed (*code*) and the speed at which the letters are being transmitted (*wpm*).
+
+ - Delegate callback sent before the first symbol in a letter is displayed on the LED.  Identifies the instance that sent the delegate callback `morse`, the next four letters (`nextLetters`) that are going to be decoded in the future including the current letter, the current word the current letter is in (`currentWord`), the current code of the letter being displayed (`code`) and the speed at which the letters are being transmitted (`wpm`).
  
 `- (void)morseCode:(Morse *)morse didBeginEncodingText:(NSString *)text`
- - Delegate callback sent before the first letter in the *text* that is to be transmitted is transmitted.
+
+ - Delegate callback sent before the first letter in the `text` that is to be transmitted is transmitted.
 
 `- (BOOL)morseCodeShouldAutoRepeat:(Morse *)morse;`
- - Delegate callback determining whether or not the instance of *morse* should autorepeat.  Value is grabbed just after the last symbol in the last word is transmitted.
+
+ - Delegate callback determining whether or not the instance of `morse` should autorepeat.  Value is grabbed just after the last symbol in the last word is transmitted.
 
 `- (void)morseCodeDidEnd:(Morse *)morse withRepeat:(BOOL)willRepeat withError:(NSError *)error;`
- - Delegate callback fired when the last symbol on the last letter is transmitted in *morse*.  The method indicates whether *morse* will repeat (*willRepeat*) and if it had an *error* (not yet implemented).
+
+ - Delegate callback fired when the last symbol on the last letter is transmitted in `morse`.  The method indicates whether `morse` will repeat (`willRepeat`) and if it had an `error` (not yet implemented).
     
 ###To Use
  1. Create instance of LARSTorch
 
-`LARSTorch *torch = [[LARSTorch alloc] init];`
+    `LARSTorch *torch = [[LARSTorch alloc] init];`
 
  2. Create instance of LARSMorse and pass in LARSTorch
 
-`LARSMorse *morse = [[LARSMorse alloc] initWithLATorch:torch];`
+    `LARSMorse *morse = [[LARSMorse alloc] initWithLATorch:torch];`
     
  3. Input text to encode
 
-`[morse stringToMorse:@"Hello World"];`
+    `[morse stringToMorse:@"Hello World"];`
     
  4. Start morse transmission
 
-`[morse playbackMorse];`
+    `[morse playbackMorse];`
