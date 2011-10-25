@@ -163,6 +163,10 @@
 	}
 }
 
+- (void)setIdleTimerDisabled:(BOOL)disabled{
+    [[self torch] setIdleTimerDisabled:disabled];
+}
+
 - (void)dealloc{
 	[self killTimer:strobeTimerOff];
 	[self killTimer:strobeTimer];

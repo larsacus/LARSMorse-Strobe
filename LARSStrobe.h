@@ -50,5 +50,6 @@
 - (void)killTimer:(NSTimer *)timer;
 - (void)turnOn;
 - (void)turnOff;
+- (void)setIdleTimerDisabled:(BOOL)disabled;
 @end
 #endif
