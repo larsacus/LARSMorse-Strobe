@@ -56,24 +56,25 @@
         NSString *dictPath = [[NSBundle mainBundle] pathForResource:@"MorseDict" ofType:@"plist"];
         _morseCodeDict = [[NSDictionary alloc] initWithContentsOfFile:dictPath];
     }
-    //NSLog(@"Number of items in dict: %i", [[self morseCodeDict] count]);
-    NSLog(@"Current Letter: %C", character);
+    //DLog(@"Number of items in dict: %i", [[self morseCodeDict] count]);
+    DLog(@"Current Letter: %C", character);
     NSString *appendString;
 
     NSString *key = [NSString stringWithFormat:@"%C",character];
     NSString *code = [[self morseCodeDict] valueForKey:key];
-    if (code) {
+    if (code != nil) {
         appendString = [NSString stringWithString:code];
         if (character != ' ') {
             appendString = [NSString stringWithString:[appendString stringByAppendingString:@"+"]];
         }
-        
-        [characterArray appendString:appendString];
     }
     else{
         //not a coded character; skip
-        //appendString = @"";
+        DLog(@"Not a coded character: %C", character);
+        appendString = @" ";
     }
+    
+    [characterArray appendString:appendString];
 }
 
 - (void)stringToMorse:(NSString *)stringToTranslate{
@@ -81,22 +82,23 @@
 	[[self morseArray] setString:@""];
 	[self setOriginalString:stringToTranslate];
     
-    if ([[stringToTranslate componentsSeparatedByString:@" "] count] > 1) {
-        NSLog(@"string has more than one word: %@", stringToTranslate);
+    if ([[stringToTranslate componentsSeparatedByString:@" "] count] > 0) {
+        DLog(@"string has more than one word: %@", stringToTranslate);
         _wordArray = [[NSArray alloc] initWithArray:[stringToTranslate componentsSeparatedByString:@" "]];
     }
     else{
         //only one word
-        NSLog(@"string only has one word... %@", stringToTranslate);
+        DLog(@"string only has one word... %@", stringToTranslate);
         _wordArray = [[NSArray alloc] initWithObjects:stringToTranslate, nil];
     }
 	
 	for (int i = 0; i<[stringToTranslate length]; i++) {
 		//[stringToTranslate characterAtIndex:i];
+        
 		[self translateCharacterToMorse:[[stringToTranslate uppercaseString] characterAtIndex:i] addToArray:[self morseArray]];
 	}
 	
-	NSLog(@"Morse String (%d): %@", [[self morseArray] length],[self morseArray]);
+	DLog(@"Morse String (%d): \"%@\"", [[self morseArray] length],[self morseArray]);
 }
 
 - (void)playbackMorse{
@@ -109,89 +111,124 @@
     self.running = YES;
 	 //reset for new character
     float units = 0.0;
-
-    if ([[self delegate] respondsToSelector:@selector(morseCode:willEncodeLetters:inWord:withCode:withSpeedInWPM:)] && self.shouldAdvanceLetter) {
-        
-        NSString *nextLetters = [[[self originalString] substringFromIndex:currentCharacterCount] uppercaseString];
-        NSString *nextLetter = [[NSString stringWithFormat:@"%C", [[self originalString] characterAtIndex:currentCharacterCount]] uppercaseString];
-        NSString *wordWithLetter = [NSString stringWithFormat:@"%@",[[self wordArray] objectAtIndex:self.currentWordCount]];
-        
-        [[self delegate] morseCode:self
-                  willEncodeLetters:nextLetters
-                            inWord:wordWithLetter
-                            withCode:[[self morseCodeDict] objectForKey:nextLetter]
-                    withSpeedInWPM:self.wpm
-         ];
-        NSLog(@"Letter: %@   Code: %@   Symbol: %C   MorseCount: %i", nextLetter, 
-              [[self morseCodeDict] objectForKey:nextLetter],
-              [morseArray characterAtIndex:[self morsePlaybackCount]], [self morsePlaybackCount]);
-    }
+    BOOL shouldSkipForeignLetter = NO;
     
-    self.shouldAdvanceLetter = NO;
-	
-	[self killTimer:morseTimer];
-	
-	if (((morsePlaybackCount < [morseArray length]-1) && ([morseArray length] > 0) && currentCharacterCount < [[self originalString] length])) {
-		switch ([morseArray characterAtIndex:[self morsePlaybackCount]]) {
-			case '.'://dot = 1 unit on
-				[self turnOn];
-                units = 1;
-                
-				break;
-			case '-'://dash = 3 units on
-				[self turnOn];
-                units = 3;
-                
-				break;
-			case '+':;//letter gap = 3 units off
-				[self turnOff];
-				self.currentCharacterCount++;
-                self.shouldAdvanceLetter = YES;
-                units = 3;
-                
-				break;
-            case ' '://word gap = 7 units off - standard letter gap (3) = 4 unit additional off time
-				[self turnOff];
-				self.currentCharacterCount++;
-                self.currentWordCount++;
-                self.shouldAdvanceLetter = YES;
-                units = 4;
-                
-				break;
-			default:
-				break;
-		}
+    if (self.currentWordCount < [self.wordArray count]
+        && self.currentCharacterCount < [self.originalString length]) {
         
-        self.morseTimer = [NSTimer scheduledTimerWithTimeInterval:(1.2/self.wpm)*units
-                                                           target:self
-                                                         selector:@selector(unitGap)
-                                                         userInfo:nil
-                                                          repeats:NO
-                           ];
-	}
-	else {
-		if ([[self delegate] respondsToSelector:@selector(morseCodeShouldAutoRepeat:)]) {
-			//morse code did finish
-            if ([[self delegate] morseCodeShouldAutoRepeat:self]) {
-                //should autorepeat
-                [self stopMorsePlaybackWithError:nil shouldNotify:YES withRepeat:YES];
-                
-                self.morseTimer = [NSTimer scheduledTimerWithTimeInterval:2.5
-                                                                   target:self
-                                                                 selector:@selector(playbackMorse)
-                                                                 userInfo:nil
-                                                                  repeats:NO
-                                   ];
+        if ([[self delegate] respondsToSelector:@selector(morseCode:willEncodeLetters:inWord:withCode:withSpeedInWPM:)] && self.shouldAdvanceLetter) {
+            
+            NSString *nextLetters = [[[self originalString] substringFromIndex:currentCharacterCount] uppercaseString];
+            
+            NSString *nextLetter = [[NSString stringWithFormat:@"%C", [[self originalString] characterAtIndex:currentCharacterCount]] uppercaseString];
+            
+            if ([self.morseCodeDict objectForKey:nextLetter] == nil) {
+                shouldSkipForeignLetter = YES;
+            }
+            
+            DLog(@"Before capturing word for current word count %i", self.currentWordCount);
+            NSString *wordWithLetter = [NSString stringWithFormat:@"%@",[[self wordArray] objectAtIndex:self.currentWordCount]];
+            DLog(@"Captured word %@ for letter %@", wordWithLetter,nextLetter);
+            
+            [[self delegate] morseCode:self
+                      willEncodeLetters:nextLetters
+                                inWord:wordWithLetter
+                                withCode:[[self morseCodeDict] objectForKey:nextLetter]
+                        withSpeedInWPM:self.wpm
+             ];
+            DLog(@"Letter: %@   Code: %@   Symbol: %C   MorseCount: %i",
+                 nextLetter, 
+                 [[self morseCodeDict] objectForKey:nextLetter],
+                 [morseArray characterAtIndex:[self morsePlaybackCount]],
+                 [self morsePlaybackCount]);
+        }
+        
+        self.shouldAdvanceLetter = NO;
+        
+        [self killTimer:morseTimer];
+        
+        if (((morsePlaybackCount < [morseArray length]-1)
+             && ([morseArray length] > 0)
+             && currentCharacterCount < [[self originalString] length])
+             && shouldSkipForeignLetter == NO) {
+            switch ([morseArray characterAtIndex:[self morsePlaybackCount]]) {
+                case '.'://dot = 1 unit on
+                    [self turnOn];
+                    units = 1;
+                    
+                    break;
+                case '-'://dash = 3 units on
+                    [self turnOn];
+                    units = 3;
+                    
+                    break;
+                case '+':;//letter gap = 3 units off
+                    [self turnOff];
+                    self.currentCharacterCount++;
+                    self.shouldAdvanceLetter = YES;
+                    units = 3;
+                    
+                    break;
+                case ' '://word gap = 7 units off - standard letter gap (3) = 4 unit additional off time
+                    [self turnOff];
+                    self.currentCharacterCount++;
+                    self.currentWordCount++;
+                    self.shouldAdvanceLetter = YES;
+                    units = 4;
+                    
+                    break;
+                default:
+                    break;
+            }
+            
+            self.morseTimer = [NSTimer scheduledTimerWithTimeInterval:(1.2/self.wpm)*units
+                                                               target:self
+                                                             selector:@selector(unitGap)
+                                                             userInfo:nil
+                                                              repeats:NO
+                               ];
+        }
+        else if(shouldSkipForeignLetter == YES){
+            self.currentCharacterCount++;
+            //self.currentWordCount++;
+            self.shouldAdvanceLetter = YES;
+            
+            self.morseTimer = [NSTimer scheduledTimerWithTimeInterval:(1.2/self.wpm)*units
+                                                               target:self
+                                                             selector:@selector(unitGap)
+                                                             userInfo:nil
+                                                              repeats:NO
+                               ];
+        }
+        else {
+            if ([[self delegate] respondsToSelector:@selector(morseCodeShouldAutoRepeat:)]) {
+                //morse code did finish
+                if ([[self delegate] morseCodeShouldAutoRepeat:self]) {
+                    //should autorepeat
+                    [self stopMorsePlaybackWithError:nil shouldNotify:YES withRepeat:YES];
+                    
+                    self.morseTimer = [NSTimer scheduledTimerWithTimeInterval:2.5
+                                                                       target:self
+                                                                     selector:@selector(playbackMorse)
+                                                                     userInfo:nil
+                                                                      repeats:NO
+                                       ];
+                }
+                else{
+                    [self stopMorsePlaybackWithError:nil shouldNotify:YES withRepeat:NO];
+                }
             }
             else{
+                //defaults to no
                 [self stopMorsePlaybackWithError:nil shouldNotify:YES withRepeat:NO];
             }
-		}
-        else{
-            //defaults to no
-            [self stopMorsePlaybackWithError:nil shouldNotify:YES withRepeat:NO];
         }
-	}
+    }
+    else{
+        //end morse
+        NSError *playbackError = [NSError errorWithDomain:@"LARSMorseError" code:500 userInfo:nil];
+        [self stopMorsePlaybackWithError:playbackError shouldNotify:YES withRepeat:NO];
+    }
 }
 
 - (void)unitGap{
@@ -249,6 +286,8 @@
     
     [_morseCodeDict release];
     _morseCodeDict = nil;
+    
+    [_wordArray release], _wordArray = nil;
 	
 	[super dealloc];
 }
