@@ -71,7 +71,7 @@
     else{
         //not a coded character; skip
         DLog(@"Not a coded character: %C", character);
-        appendString = @" ";
+        appendString = @"+";
     }
     
     [characterArray appendString:appendString];
@@ -128,7 +128,7 @@
             
             DLog(@"Before capturing word for current word count %i", self.currentWordCount);
             NSString *wordWithLetter = [NSString stringWithFormat:@"%@",[[self wordArray] objectAtIndex:self.currentWordCount]];
-            DLog(@"Captured word %@ for letter %@", wordWithLetter,nextLetter);
+            DLog(@"Captured word \"%@\" with next letters \"%@\"", wordWithLetter,nextLetters);
             
             [[self delegate] morseCode:self
                       willEncodeLetters:nextLetters
@@ -189,11 +189,12 @@
                                ];
         }
         else if(shouldSkipForeignLetter == YES){
+            DLog(@"Skipping foreign letter");
             self.currentCharacterCount++;
             //self.currentWordCount++;
             self.shouldAdvanceLetter = YES;
             
-            self.morseTimer = [NSTimer scheduledTimerWithTimeInterval:(1.2/self.wpm)*units
+            self.morseTimer = [NSTimer scheduledTimerWithTimeInterval:(1.2/self.wpm)*1.0
                                                                target:self
                                                              selector:@selector(unitGap)
                                                              userInfo:nil
