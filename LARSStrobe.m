@@ -170,13 +170,6 @@
 - (void)dealloc{
 	[self killTimer:strobeTimerOff];
 	[self killTimer:strobeTimer];
-    
-    [strobeTimerOff release];
-    [strobeTimer release];
-
-    [_torch release];
-	
-	[super dealloc];
 }
 
 @end

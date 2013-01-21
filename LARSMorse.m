@@ -285,12 +285,8 @@
 	characterLabel = nil;
 	originalString = nil;
     
-    [_morseCodeDict release];
     _morseCodeDict = nil;
-    
-    [_wordArray release], _wordArray = nil;
-	
-	[super dealloc];
+    _wordArray = nil;
 }
 
 @end
