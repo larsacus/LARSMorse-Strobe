@@ -41,7 +41,7 @@
 	if ([self torch]){
         BOOL torchState = [[self torch] isTorchOn];
         
-        [[self torch] setTorchOn:!torchState];
+        [[self torch] setTorchState:!torchState];
         
         [self killTimer:strobeTimerOff];
 
@@ -58,7 +58,7 @@
 	if ([self torch]){
         BOOL torchState = [[self torch] isTorchOn];
         
-        [[self torch] setTorchOn:!torchState];
+        [[self torch] setTorchState:!torchState];
         
         [self killTimer:strobeTimerOff];
         
@@ -76,7 +76,7 @@
 		
 		BOOL torchState = [[self torch] isTorchOn];
         
-        [[self torch] setTorchOn:!torchState];
+        [[self torch] setTorchState:!torchState];
         
         [self killTimer:strobeTimerOff];
 		
@@ -90,13 +90,13 @@
 
 - (void)turnOff{
 	if ([self torch]) {
-        [[self torch] setTorchOn:NO];
+        [[self torch] setTorchState:NO];
     }
 }
 
 - (void)turnOn{
 	if ([self torch]) {
-        [[self torch] setTorchOn:YES];
+        [[self torch] setTorchState:YES];
     }
 }
 
@@ -159,12 +159,12 @@
 
 - (void)restoreFlashlightState{
 	if (self.originalFlashlightState) {
-		[[self torch] setTorchOn:self.originalFlashlightState];
+		[[self torch] setTorchState:self.originalFlashlightState];
 	}
 }
 
 - (void)setIdleTimerDisabled:(BOOL)disabled{
-    [[self torch] setIdleTimerDisabled:disabled];
+    [UIApplication sharedApplication].idleTimerDisabled = disabled;
 }
 
 - (void)dealloc{
