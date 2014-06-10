@@ -7,7 +7,7 @@ Pod::Spec.new dp |s|
 		'Lars Anderson' => 'iAm@theonlylars.com'
 	}
 	s.license = {:type => 'MIT', :file => 'LICENSE'}
-	s.platform = :ios, '4.0'
+	s.platform = :ios, '5.0'
 	s.source = {
 		:git => 'https://github.com/larsacus/LARSMorse-Strobe.git'
 		:tag => s.version.to_s
