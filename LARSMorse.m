@@ -19,6 +19,14 @@
 #if !TARGET_IPHONE_SIMULATOR
 #import "LARSMorse.h"
 
+#ifndef DLog
+#if DEBUG
+#define DLog(fmt, ...) NSLog((@"%s [Line %d] " fmt), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__);
+#else
+#define DLog(fmt, ...) /* */
+#endif
+#endif
+
 
 @implementation LARSMorse
 
