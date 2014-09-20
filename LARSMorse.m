@@ -30,20 +30,6 @@
 
 @implementation LARSMorse
 
-@synthesize delegate = _delegate;
-@synthesize morseArray, 
-            wpm, 
-            morsePlaybackCount, 
-            morseTimer,
-            currentCharacterCount,
-            characterLabel, 
-            originalString;
-@synthesize morseCodeDict = _morseCodeDict;
-@synthesize currentWordCount = _currentWordCount;
-@synthesize wordArray = _wordArray;
-@synthesize shouldAdvanceLetter = _shouldAdvanceLetter;
-@synthesize running = _running;
-
 - (id)initWithLARSTorch:(LARSTorch *)torch{
 	if (self = [super initWithLARSTorch:torch]) {
 		
@@ -60,8 +46,10 @@
 }
 
 - (void)translateCharacterToMorse:(unichar)character addToArray:(NSMutableString *)characterArray{
-    if(![self morseCodeDict]){
-        NSString *dictPath = [[NSBundle mainBundle] pathForResource:@"MorseDict" ofType:@"plist"];
+    if(!self.morseCodeDict){
+        NSBundle *morseBundle = [NSBundle bundleForClass:[LARSMorse class]];
+        NSString *dictPath = [morseBundle pathForResource:@"MorseDict"
+                                                   ofType:@"plist"];
         _morseCodeDict = [[NSDictionary alloc] initWithContentsOfFile:dictPath];
     }
     //DLog(@"Number of items in dict: %i", [[self morseCodeDict] count]);
@@ -126,9 +114,9 @@
         
         if ([[self delegate] respondsToSelector:@selector(morseCode:willEncodeLetters:inWord:withCode:withSpeedInWPM:)] && self.shouldAdvanceLetter) {
             
-            NSString *nextLetters = [[[self originalString] substringFromIndex:currentCharacterCount] uppercaseString];
+            NSString *nextLetters = [[[self originalString] substringFromIndex:self.currentCharacterCount] uppercaseString];
             
-            NSString *nextLetter = [[NSString stringWithFormat:@"%C", [[self originalString] characterAtIndex:currentCharacterCount]] uppercaseString];
+            NSString *nextLetter = [[NSString stringWithFormat:@"%C", [[self originalString] characterAtIndex:self.currentCharacterCount]] uppercaseString];
             
             if ([self.morseCodeDict objectForKey:nextLetter] == nil) {
                 shouldSkipForeignLetter = YES;
@@ -147,19 +135,19 @@
             DLog(@"Letter: %@   Code: %@   Symbol: %C   MorseCount: %i",
                  nextLetter, 
                  [[self morseCodeDict] objectForKey:nextLetter],
-                 [morseArray characterAtIndex:[self morsePlaybackCount]],
+                 [self.morseArray characterAtIndex:[self morsePlaybackCount]],
                  [self morsePlaybackCount]);
         }
         
         self.shouldAdvanceLetter = NO;
         
-        [self killTimer:morseTimer];
+        [self killTimer:self.morseTimer];
         
-        if (((morsePlaybackCount < [morseArray length]-1)
-             && ([morseArray length] > 0)
-             && currentCharacterCount < [[self originalString] length])
+        if (((self.morsePlaybackCount < [self.morseArray length]-1)
+             && ([self.morseArray length] > 0)
+             && self.currentCharacterCount < [[self originalString] length])
              && shouldSkipForeignLetter == NO) {
-            switch ([morseArray characterAtIndex:[self morsePlaybackCount]]) {
+            switch ([self.morseArray characterAtIndex:[self morsePlaybackCount]]) {
                 case '.'://dot = 1 unit on
                     [self turnOn];
                     units = 1;
@@ -241,10 +229,10 @@
 }
 
 - (void)unitGap{
-	morsePlaybackCount++;
+	self.morsePlaybackCount++;
 	[self turnOff]; //gap is off for one unit
 	
-	[self killTimer:morseTimer];
+	[self killTimer:self.morseTimer];
 	
 	self.morseTimer = [NSTimer scheduledTimerWithTimeInterval:(1.2/self.wpm)*1 
 													   target:self
@@ -259,7 +247,7 @@
 }
 
 - (void)stopMorsePlaybackWithError:(NSError *)error shouldNotify:(BOOL)shouldNotify withRepeat:(BOOL)willRepeat{
-	[self killTimer:morseTimer];
+	[self killTimer:self.morseTimer];
 	[self setMorsePlaybackCount:0];
 	[self setCurrentCharacterCount:0];
     [self setCurrentWordCount:0];
@@ -284,17 +272,11 @@
 }
 
 - (float)unitTimeInSeconds{
-    return (float)(1.20/wpm);
+    return (float)(1.20/self.wpm);
 }
 
-- (void)dealloc{	
-	morseArray = nil;
-	[self killTimer:morseTimer];
-	characterLabel = nil;
-	originalString = nil;
-    
-    _morseCodeDict = nil;
-    _wordArray = nil;
+- (void)dealloc{
+	[self killTimer:self.morseTimer];
 }
 
 @end

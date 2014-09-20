@@ -32,24 +32,9 @@
 
 @end
 
-@interface LARSMorse : LARSStrobe {
+@interface LARSMorse : LARSStrobe
 
-    id <LARSMorseDelegate> _delegate;
-	NSMutableString *morseArray;
-    NSArray *_wordArray;
-    NSDictionary *_morseCodeDict;
-	NSInteger wpm;
-	NSInteger morsePlaybackCount;
-	NSTimer *morseTimer;
-	NSInteger currentCharacterCount;
-    NSInteger _currentWordCount;
-	UILabel *characterLabel;
-	NSString *originalString;
-    BOOL _shouldAdvanceLetter;
-    BOOL _running;
-}
-
-@property(retain) id delegate;
+@property(nonatomic, weak) id<LARSMorseDelegate> delegate;
 
 @property(nonatomic,retain) NSMutableString *morseArray;
 @property(nonatomic,retain) NSArray *wordArray;
