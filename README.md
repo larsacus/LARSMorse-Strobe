@@ -1,9 +1,9 @@
-#LARSMorse & LARSStrobe
-##Requirements
+# LARSMorse & LARSStrobe
+## Requirements
  - iOS 4.0+
  - iPhone 4+ (Device with LED flash)
  
-##LARSStrobe
+## LARSStrobe
 `LARSStrobe` will enable the LED flash on the back of an iDevice with a flash to be used as a strobe light.  This class is required for `LARSMorse` to function, but can function on it's own as a strobe light.
 
 ***Requires `LARSTorch`***
@@ -17,13 +17,13 @@ LARSStrobe *strobe = [[LARSStrobe alloc] initWithLATorch:torch];
 [strobe startStrobe];
 ```
 
-##LARSMorse *(subclass of `LARSStrobe`)*
+## LARSMorse *(subclass of `LARSStrobe`)*
 `LARSMorse` will enable the LED flash on the back of an iDevice with a flash to be used to encode strings into visual Morse transmissions.
 
 ***Requires both `LARSTorch` & `LARSStrobe`***
 
-###Delegate Callback Methods
-####Summary
+### Delegate Callback Methods
+#### Summary
 ``` objective-c
 - (void)morseCode:(Morse *)morse willEncodeLetters:(NSString *)nextLetters inWord:(NSString *)currentWord withCode:(NSString *)code withSpeedInWPM:(NSInteger)wpm;
 - (void)morseCode:(Morse *)morse didBeginEncodingText:(NSString *)text;
@@ -31,7 +31,7 @@ LARSStrobe *strobe = [[LARSStrobe alloc] initWithLATorch:torch];
 - (void)morseCodeDidEnd:(Morse *)morse withRepeat:(BOOL)willRepeat withError:(NSError *)error;
 ```
 
-####Detail
+#### Detail
 ``` objective-c
 - (void)morseCode:(Morse *)morse willEncodeLetters:(NSString *)nextLetters inWord:(NSString *)currentWord withCode:(NSString *)code withSpeedInWPM:(NSInteger)wpm
 ```
@@ -56,7 +56,7 @@ LARSStrobe *strobe = [[LARSStrobe alloc] initWithLATorch:torch];
 
  - Delegate callback fired when the last symbol on the last letter is transmitted in `morse`.  The method indicates whether `morse` will repeat (`willRepeat`) and if it had an `error` (not yet implemented).
     
-###Usage
+### Usage
 
 ``` objective-c
 LARSTorch *torch = [[LARSTorch alloc] init];
